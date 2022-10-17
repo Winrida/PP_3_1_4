@@ -7,8 +7,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
-import ru.kata.spring.boot_security.demo.security.UsersDetails;
 
+
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +26,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    @Transactional
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteById(Integer id) {
         userRepository.deleteById(id);
     }
@@ -38,12 +41,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String username) {
+        User user = userRepository.findByEmail(username);
 
-        if (user.isEmpty())
-            throw new UsernameNotFoundException("User not found!");
-
-        return new UsersDetails(user.get());
+        return user;
     }
 }
