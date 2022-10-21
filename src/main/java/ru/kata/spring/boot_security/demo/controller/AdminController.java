@@ -34,43 +34,4 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/admin/new")
-    public String createUser(User user, Principal principal, Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("users", userService.loadUserByUsername(principal.getName()));
-        return "new";
-    }
-
-    @PostMapping("/admin/new")
-    public String create(User user) {
-        userService.saveUser(user);
-        return "redirect:/admin";
-    }
-
-    @GetMapping("/admin/{id}")
-    public String show(@PathVariable("id") Integer id, Model model) {
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        return "show";
-    }
-
-    @GetMapping("/admin/{id}/edit")
-    public String edit(@PathVariable("id") Integer id, Model model) {
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        return "edit";
-    }
-
-
-    @DeleteMapping("/admin/{id}")
-    public String deleteUser(@PathVariable("id") Integer id) {
-        userService.deleteById(id);
-        return "redirect:/admin";
-    }
-
-    @PatchMapping("/admin/{id}")
-    public String updateUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
-        return "redirect:/admin";
-    }
 }
